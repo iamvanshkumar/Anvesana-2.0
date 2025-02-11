@@ -1,0 +1,30 @@
+.board {
+    position: relative;
+    width: 400px;
+    height: 400px;
+    background-color: #222;
+    border: 2px solid white;
+}
+
+.snake {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background-color: green;
+}
+
+.food {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background-color: red;
+}
+
+.game-over {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-size: 24px;
+}

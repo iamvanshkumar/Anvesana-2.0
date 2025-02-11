@@ -17,6 +17,7 @@ export default function SignUpPage() {
     process: "",
     shift: "",
     password: "",
+    phoneNumber: "",
   });
 
   const handleChange = (e) => {

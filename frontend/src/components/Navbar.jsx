@@ -2,6 +2,8 @@ import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import profileIcon from "../assets/img/user/profile.png";
 import "boxicons";
+import { FaCalendar, FaClock } from "react-icons/fa";
+import { useUser } from "../firebase/userContext";
 
 export default function Navbar() {
   const [currentDate, setCurrentDate] = useState("");
@@ -55,16 +57,25 @@ export default function Navbar() {
   // Toggle dropdown on button click
   const toggleDropdown = () => setDropdownOpen(!dropdownOpen);
 
+  const { user, loading } = useUser();
+  if (loading) return <p>Loading...</p>;
+
   return (
     <nav className="w-full flex items-center justify-between p-2 border-b border-gray-100">
       <div className="text-xl">
         <span className="text-[#2BACDE] font-light">
-          {greeting},<span className="text-gray-800 font-medium"> Vansh</span>
+          {greeting},
+          <span className="text-gray-800 font-medium">
+            {" "}
+            {user ? user.firstName : "Guest"}
+          </span>
         </span>
       </div>
       <div className="flex items-center text-gray-600 text-sm gap-1">
-        <span className="font-semibold pl-1">{currentDate}</span>
-        <span className="ml-2">{time}</span> {/* Display the current time */}
+        <FaCalendar className="text-[#2BACDE]" />
+        <span className="font-semibold">{currentDate}</span>
+        <FaClock className="ml-2 text-[#2BACDE]" />
+        <span>{time}</span> {/* Display the current time */}
       </div>
       <div className="relative">
         {/* Button to toggle dropdown */}
@@ -79,7 +90,7 @@ export default function Navbar() {
             draggable="false"
           />
           <span className="text-sm text-gray-600 font-medium hover:text-[#2BACDE]">
-            Vansh Kumar
+            {user ? user.firstName : "Guest"}
           </span>
           <box-icon name="chevron-down"></box-icon>
         </button>
@@ -91,12 +102,15 @@ export default function Navbar() {
             onClick={() => setDropdownOpen(false)} // Close on click outside
           >
             <ul className="py-1 text-sm text-gray-700">
-              <Link to="/profile" className="flex gap-1 px-4 py-2 hover:bg-gray-100 cursor-pointer">
-              <box-icon name='user' size="xs" color='#364153' ></box-icon>
+              <Link
+                to="/profile"
+                className="flex gap-1 px-4 py-2 hover:bg-gray-100 cursor-pointer"
+              >
+                <box-icon name="user" size="xs" color="#364153"></box-icon>
                 Profile
               </Link>
               <li className="flex gap-1 px-4 py-2 hover:bg-gray-100 text-red-500 cursor-pointer">
-                <box-icon name='log-out' size='xs' color='#fb2c36'></box-icon>
+                <box-icon name="log-out" size="xs" color="#fb2c36"></box-icon>
                 Logout
               </li>
             </ul>

@@ -15,6 +15,7 @@ const handleSignup = async (e, userData, navigate) => {
     process,
     shift,
     password,
+    phoneNumber
   } = userData;
 
 
@@ -32,7 +33,7 @@ const handleSignup = async (e, userData, navigate) => {
     !employeeId ||
     !city ||
     !process ||
-    !shift
+    !shift 
   ) {
     alert("Please fill all the details");
     return;
@@ -56,6 +57,7 @@ const handleSignup = async (e, userData, navigate) => {
       city: city,
       process: process,
       shift: shift,
+      phone: phoneNumber,
     });
     alert("User has been created");
 

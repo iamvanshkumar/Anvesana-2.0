@@ -1,7 +1,4 @@
 @import "tailwindcss";
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
 
 /* Ensure html and body take up full height */
 
@@ -25,4 +22,63 @@ body {
     background-image: url('./assets/img/background/header_profile.png');
     background-repeat: no-repeat;
     background-size: cover;
+}
+
+@keyframes gameOverAnimation {
+    0% {
+        background-color: white;
+    }
+    50% {
+        background-color: red;
+    }
+    100% {
+        background-color: white;
+    }
+}
+
+.game-over {
+    animation: gameOverAnimation 1s infinite;
+}
+
+.bg_icons {
+    background: url("./assets/img/background/bg_icons.png");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+}
+
+.bg_card {
+    background: url("./assets/img/background/bg-card.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.game-container {
+    text-align: center;
+    font-family: Arial, sans-serif;
+}
+
+.game {
+    position: relative;
+    width: 400px;
+    height: 200px;
+    border: 2px solid black;
+    background-color: #f7f7f7;
+    overflow: hidden;
+    margin: auto;
+}
+
+.dino {
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    bottom: 0;
+    left: 20px;
+}
+
+.cactus {
+    position: absolute;
+    width: 30px;
+    height: 50px;
+    bottom: 0;
 }

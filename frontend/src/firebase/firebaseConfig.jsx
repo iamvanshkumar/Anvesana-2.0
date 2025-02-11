@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app";
-import { getAuth } from "firebase/auth";
-import { getFirestore } from "firebase/firestore";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { getFirestore, doc, getDoc } from "firebase/firestore";
 import { getAnalytics } from "firebase/analytics";
 
 // Firebase configuration using environment variables
@@ -22,6 +22,23 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 
 // Initialize Firebase Analytics
-const analytics = getAnalytics(app); 
+const analytics = getAnalytics(app);
 
-export { auth, db, analytics };
+const fetchUserDetails = async (uid) => {
+  if (!uid) return null;
+
+  const userRef = doc(db, "Users", uid);
+
+  const userSnap = await getDoc(userRef);
+
+  if (userSnap.exists()) {
+    return userSnap.data();
+  } else {
+    console.log("User not found");
+    return null;
+  }
+};
+
+
+
+export { auth, db, analytics, fetchUserDetails};

@@ -1,9 +1,10 @@
 import React, { useState, useRef } from "react";
-import { Link } from "react-router-dom";
 import Sidebar from "../components/Sidebar";
 import Navbar from "../components/Navbar";
 import profileIcon from "../assets/img/user/profile.png";
 import FormInput from "../components/FormInput";
+import { useUser } from "../firebase/userContext";
+import "../index.css";
 import {
   FaUser,
   FaEdit,
@@ -24,7 +25,7 @@ export default function ProfilePage() {
   const [city, setCity] = useState("");
   const [process, setProcess] = useState("");
   const [shift, setShift] = useState("");
-  
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isImageModalOpen, setIsImgModalOpen] = useState(false);
   const [fileName, setFileName] = useState("");
@@ -49,43 +50,24 @@ export default function ProfilePage() {
     }
   };
 
+  const { user, loading } = useUser();
+  if (loading) return <p>Loading...</p>;
+
   return (
     <div className="h-screen grid grid-cols-5 bg-gray-50 p-2">
       {/* Sidebar */}
       <Sidebar />
 
       {/* Main Content */}
-      <main className="col-span-4 flex flex-col gap-4 h-full py-2 px-4">
+      <main className="col-span-4 flex flex-col gap-4 h-full py-2 px-4 overflow-y-scroll">
         <Navbar />
 
-        {/* Breadcrumb */}
-        <nav className="flex px-5 py-3 text-gray-700 border border-gray-100 shadow-sm rounded-lg bg-white">
-          <ol className="inline-flex items-center space-x-1 md:space-x-2">
-            <li className="inline-flex items-center">
-              <Link
-                to="/home"
-                className="inline-flex items-center text-sm font-medium text-gray-700 hover:text-[#2BACDE]"
-              >
-                Home
-              </Link>
-            </li>
-            <FaAngleRight className="text-gray-500 " />
-            <li>
-              <div className="flex items-center">
-                <span className="text-sm font-medium text-gray-500">
-                  My Profile
-                </span>
-              </div>
-            </li>
-          </ol>
-        </nav>
-
         {/* Profile Section */}
-        <div className="bg-white border border-gray-100 rounded-lg shadow-sm py-4 px-8 flex items-center gap-4">
+        <div className="bg_card rounded-lg shadow-sm py-4 px-8 flex items-center gap-4">
           <div className="flex flex-col items-center">
             <img
               src={profileIcon}
-              className="h-24 w-24 rounded-full shadow-sm"
+              className="h-24 w-24 rounded-full shadow-sm border-2 border-[#2EC4FF]"
               alt="User Icon"
               draggable="false"
             />
@@ -93,19 +75,19 @@ export default function ProfilePage() {
             <button
               onClick={handleImageEditClick}
               className="-mt-3
-              cursor-pointer flex items-center gap-1 bg-[#2BACDE] px-2 py-1 rounded-sm text-sm text-white hover:bg-[#3B71B6] transition-all duration-300"
+              cursor-pointer flex items-center gap-1 bg-[#2EC4FF] px-2 py-1 rounded-sm text-sm text-white hover:bg-[#3B71B6] transition-all duration-300"
             >
               <FaCamera className="text-white" />
             </button>
           </div>
           <div className="flex flex-col">
-            <h2 className="text-2xl font-semibold text-[#2BACDE]">
-              Vansh Kumar
+            <h2 className="text-2xl font-semibold text-[#2EC4FF]">
+            {user ? user.firstName + " " + user.lastName : "Guest"}
             </h2>
             <span className="text-gray-500 text-sm">
-              vansh.kumar@berg.co.in
+            {user ? user.email : "abc@berg.co.in"}
             </span>
-            <span className="text-gray-500 text-sm">MPQC-FK</span>
+            <span className="text-gray-500 text-sm">{user ? user.process : "CEO"}</span>
           </div>
         </div>
 
@@ -117,7 +99,7 @@ export default function ProfilePage() {
             </span>
             <button
               onClick={handleEditClick}
-              className="cursor-pointer flex items-center gap-1 bg-[#2BACDE] px-2 py-1 rounded-sm text-sm text-white hover:bg-[#3B71B6] transition-all duration-300"
+              className="cursor-pointer flex items-center gap-1 bg-[#2EC4FF] px-2 py-1 rounded-sm text-sm text-white hover:bg-[#3B71B6] transition-all duration-300"
             >
               Edit <FaEdit className="text-white" />
             </button>
@@ -374,12 +356,13 @@ export default function ProfilePage() {
 
           <div className="w-full grid grid-cols-3 gap-6 p-4">
             {[
-              { label: "First Name", value: "Vansh" },
-              { label: "Last Name", value: "Kumar" },
-              { label: "Date of Birth", value: "26-09-2002" },
-              { label: "Email Address", value: "vansh.kumar@berg.co.in" },
-              { label: "Phone Number", value: "7536001034" },
-              { label: "City", value: "Dehradun" },
+              
+              { label: "First Name", value: user ? user.firstName : "Guest" },
+              { label: "Last Name", value: user ? user.lastName : "Guest"},
+              { label: "Date of Birth", value: user ? user.dob : "22/06/2001" },
+              { label: "Email Address", value: user ? user.email : "abc@berg.co.in" },
+              { label: "Phone Number", value: user ? user.phone : "9999999999" },
+              { label: "City", value: user ? user.city : "Dehradun"},
             ].map((item, index) => (
               <div key={index} className="flex flex-col gap-1">
                 <span className="text-gray-500 text-sm">{item.label}</span>
@@ -400,9 +383,9 @@ export default function ProfilePage() {
 
           <div className="w-full grid grid-cols-3 gap-6 p-4">
             {[
-              { label: "Employee ID", value: "D132414" },
-              { label: "Process Name", value: "MPQC-FK" },
-              { label: "Shift Timing", value: "9 AM to 6 PM" },
+              { label: "Employee ID", value: user ? user.employeeId : "D11111"},
+              { label: "Process Name", value: user ? user.process : "CEO"},
+              { label: "Shift Timing", value: user ? user.shift : "9AM - 6PM" },
             ].map((item, index) => (
               <div key={index} className="flex flex-col gap-1">
                 <span className="text-gray-500 text-sm">{item.label}</span>
